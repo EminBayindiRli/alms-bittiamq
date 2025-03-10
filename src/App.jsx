@@ -63,7 +63,7 @@ const App = () => {
 
 // Uygulama içeriği
 const AppContent = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   
   return (
     <>
@@ -78,6 +78,14 @@ const AppContent = () => {
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <AdminRoute>
+              <Dashboard adminView={true} />
+            </AdminRoute>
           }
         />
         <Route
@@ -136,7 +144,7 @@ const AppContent = () => {
             </AdminRoute>
           }
         />
-        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} replace />} />
+        <Route path="*" element={<Navigate to={user ? (isAdmin() ? "/admin-dashboard" : "/dashboard") : "/"} replace />} />
       </Routes>
     </>
   );

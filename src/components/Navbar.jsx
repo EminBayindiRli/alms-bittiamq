@@ -156,7 +156,7 @@ const DesktopNav = ({ isAdmin }) => {
   const popoverContentBgColor = useColorModeValue('white', 'gray.800');
 
   const ALL_MENU_ITEMS = [
-    { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2, adminOnly: false },
+    { name: 'Dashboard', path: isAdmin ? '/admin-dashboard' : '/dashboard', icon: FiBarChart2, adminOnly: false },
     { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: false },
     { name: 'Training Recommendations', path: '/training', icon: FiBookOpen, adminOnly: false },
     { name: 'Employee Management', path: '/employees', icon: FiUsers, adminOnly: true },
@@ -252,7 +252,7 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
 
 const MobileNav = ({ isAdmin }) => {
   const ALL_MENU_ITEMS = [
-    { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2, adminOnly: false },
+    { name: 'Dashboard', path: isAdmin ? '/admin-dashboard' : '/dashboard', icon: FiBarChart2, adminOnly: false },
     { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: false },
     { name: 'Training Recommendations', path: '/training', icon: FiBookOpen, adminOnly: false },
     { name: 'Employee Management', path: '/employees', icon: FiUsers, adminOnly: true },
