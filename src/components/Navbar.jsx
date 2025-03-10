@@ -157,7 +157,7 @@ const DesktopNav = ({ isAdmin }) => {
 
   const ALL_MENU_ITEMS = [
     { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2, adminOnly: false },
-    { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: true },
+    { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: false },
     { name: 'Training Recommendations', path: '/training', icon: FiBookOpen, adminOnly: false },
     { name: 'Employee Management', path: '/employees', icon: FiUsers, adminOnly: true },
     { name: 'Reports', path: '/reports', icon: FiFileText, adminOnly: true },
@@ -253,7 +253,7 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
 const MobileNav = ({ isAdmin }) => {
   const ALL_MENU_ITEMS = [
     { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2, adminOnly: false },
-    { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: true },
+    { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: false },
     { name: 'Training Recommendations', path: '/training', icon: FiBookOpen, adminOnly: false },
     { name: 'Employee Management', path: '/employees', icon: FiUsers, adminOnly: true },
     { name: 'Reports', path: '/reports', icon: FiFileText, adminOnly: true },

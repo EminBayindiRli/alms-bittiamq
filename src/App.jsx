@@ -83,9 +83,9 @@ const AppContent = () => {
         <Route
           path="/performance"
           element={
-            <AdminRoute>
+            <ProtectedRoute>
               <Performance />
-            </AdminRoute>
+            </ProtectedRoute>
           }
         />
         <Route
