@@ -31,6 +31,23 @@ const ProtectedRoute = ({ children }) => {
   return <PageContainer>{children}</PageContainer>;
 };
 
+// Admin rota bileşeni
+const AdminRoute = ({ children }) => {
+  const { user, loading, isAdmin } = useAuth();
+  
+  if (loading) return null;
+  
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!isAdmin()) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  
+  return <PageContainer>{children}</PageContainer>;
+};
+
 // Ana uygulama bileşeni
 const App = () => {
   return (
@@ -66,9 +83,9 @@ const AppContent = () => {
         <Route
           path="/performance"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <Performance />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
@@ -82,25 +99,25 @@ const AppContent = () => {
         <Route
           path="/employees"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <Employees />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/reports"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <Reports />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/analysis"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <Analysis />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
@@ -114,9 +131,9 @@ const AppContent = () => {
         <Route
           path="/settings"
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <Settings />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} replace />} />

@@ -113,9 +113,11 @@ const Navbar = () => {
                 <MenuItem as={RouterLink} to="/profile">
                   Profile
                 </MenuItem>
-                <MenuItem as={RouterLink} to="/settings">
-                  Settings
-                </MenuItem>
+                {isAdmin && (
+                  <MenuItem as={RouterLink} to="/settings">
+                    Settings
+                  </MenuItem>
+                )}
                 <MenuDivider />
                 <MenuItem onClick={handleSignOut}>Logout</MenuItem>
               </MenuList>
@@ -153,14 +155,17 @@ const DesktopNav = ({ isAdmin }) => {
   const linkHoverColor = useColorModeValue('gray.800', 'white');
   const popoverContentBgColor = useColorModeValue('white', 'gray.800');
 
-  const MENU_ITEMS = [
-    { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2 },
-    { name: 'Performance', path: '/performance', icon: FiBarChart2 },
-    { name: 'Training Recommendations', path: '/training', icon: FiBookOpen },
-    { name: 'Employee Management', path: '/employees', icon: FiUsers },
-    { name: 'Reports', path: '/reports', icon: FiFileText },
-    { name: 'Analysis', path: '/analysis', icon: FiPieChart },
+  const ALL_MENU_ITEMS = [
+    { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2, adminOnly: false },
+    { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: true },
+    { name: 'Training Recommendations', path: '/training', icon: FiBookOpen, adminOnly: false },
+    { name: 'Employee Management', path: '/employees', icon: FiUsers, adminOnly: true },
+    { name: 'Reports', path: '/reports', icon: FiFileText, adminOnly: true },
+    { name: 'Analysis', path: '/analysis', icon: FiPieChart, adminOnly: true },
   ];
+
+  // Sadece kullanıcının erişim yetkisi olan menü öğelerini filtrele
+  const MENU_ITEMS = ALL_MENU_ITEMS.filter(item => !item.adminOnly || isAdmin);
 
   return (
     <Stack direction={'row'} spacing={4}>
@@ -246,14 +251,17 @@ const DesktopSubNav = ({ label, href, subLabel }) => {
 };
 
 const MobileNav = ({ isAdmin }) => {
-  const MENU_ITEMS = [
-    { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2 },
-    { name: 'Performance', path: '/performance', icon: FiBarChart2 },
-    { name: 'Training Recommendations', path: '/training', icon: FiBookOpen },
-    { name: 'Employee Management', path: '/employees', icon: FiUsers },
-    { name: 'Reports', path: '/reports', icon: FiFileText },
-    { name: 'Analysis', path: '/analysis', icon: FiPieChart },
+  const ALL_MENU_ITEMS = [
+    { name: 'Dashboard', path: '/dashboard', icon: FiBarChart2, adminOnly: false },
+    { name: 'Performance', path: '/performance', icon: FiBarChart2, adminOnly: true },
+    { name: 'Training Recommendations', path: '/training', icon: FiBookOpen, adminOnly: false },
+    { name: 'Employee Management', path: '/employees', icon: FiUsers, adminOnly: true },
+    { name: 'Reports', path: '/reports', icon: FiFileText, adminOnly: true },
+    { name: 'Analysis', path: '/analysis', icon: FiPieChart, adminOnly: true },
   ];
+
+  // Sadece kullanıcının erişim yetkisi olan menü öğelerini filtrele
+  const MENU_ITEMS = ALL_MENU_ITEMS.filter(item => !item.adminOnly || isAdmin);
 
   return (
     <Stack
