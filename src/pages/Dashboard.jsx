@@ -53,7 +53,7 @@ ChartJS.register(
   Legend
 );
 
-const Dashboard = () => {
+const Dashboard = ({ adminView = false }) => {
   const { user, isAdmin } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -69,86 +69,26 @@ const Dashboard = () => {
       setLoading(true);
       setError(null);
       try {
-        if (isAdmin) {
+        if (adminView && isAdmin()) {
           // Load admin data
           const data = await AdminService.getAllAnalyses();
           setAdminData(data);
         } else {
-          // Load employee data (fixed ID for now)
-          const employeeId = user?.id || '1'; // Real user ID
+          // Load employee data
+          const employeeId = user?.id || '1';
           const data = await EmployeeService.getEmployeeAnalysis(employeeId);
           setEmployeeData(data);
         }
       } catch (err) {
         console.error('Veri yükleme hatası:', err);
         setError('Data Loading Error');
-        
-        // Example data in case of error (development only)
-        if (isAdmin) {
-          setAdminData({
-            total_employees: 5,
-            department_statistics: {
-              'Sales': { avg_task_completion: 0.78, avg_email_response: 0.65 },
-              'Product Development': { avg_task_completion: 0.85, avg_email_response: 0.72 },
-              'HR': { avg_task_completion: 0.92, avg_email_response: 0.88 },
-            },
-            team_statistics: {
-              'Team-1': { avg_task_completion: 0.82, avg_email_response: 0.70 },
-              'Team-2': { avg_task_completion: 0.75, avg_email_response: 0.68 },
-              'Team-3': { avg_task_completion: 0.90, avg_email_response: 0.85 },
-            }
-          });
-        } else {
-          setEmployeeData({
-            employee_id: '1',
-            current_metrics: {
-              task_completion_rate: 0.85,
-              email_efficiency: 0.75,
-              meeting_efficiency: 0.70,
-              communication_score: 0.80,
-              collaboration_score: 0.65,
-              time_efficiency: 0.78,
-              file_activity: 0.62
-            },
-            historical_trends: {
-              task_completion: [
-                { day: 1, completion_rate: 0.82, overdue_ratio: 0.15 },
-                { day: 2, completion_rate: 0.84, overdue_ratio: 0.12 },
-                { day: 3, completion_rate: 0.79, overdue_ratio: 0.18 },
-                { day: 4, completion_rate: 0.85, overdue_ratio: 0.10 },
-                { day: 5, completion_rate: 0.88, overdue_ratio: 0.08 },
-                { day: 6, completion_rate: 0.86, overdue_ratio: 0.09 },
-                { day: 7, completion_rate: 0.90, overdue_ratio: 0.05 }
-              ],
-              communication: [
-                { day: 1, email_activity: 32, chat_activity: 45, response_time: 25 },
-                { day: 2, email_activity: 28, chat_activity: 42, response_time: 30 },
-                { day: 3, email_activity: 35, chat_activity: 50, response_time: 20 },
-                { day: 4, email_activity: 30, chat_activity: 48, response_time: 28 },
-                { day: 5, email_activity: 25, chat_activity: 40, response_time: 35 },
-                { day: 6, email_activity: 38, chat_activity: 52, response_time: 18 },
-                { day: 7, email_activity: 35, chat_activity: 55, response_time: 15 }
-              ]
-            },
-            recommendations: [
-              { suggestion: "E-posta yanıt sürelerini iyileştirin", reason: "E-posta yanıt süreleriniz ortalama 25 dakikanın üzerinde", priority: "high" },
-              { suggestion: "Toplantı süresini optimize edin", reason: "Toplantılarda geçirdiğiniz süre günlük 2 saatin üzerinde", priority: "medium" },
-              { suggestion: "Dosya paylaşımını artırın", reason: "Dosya paylaşım oranınız takım ortalamasının altında", priority: "low" }
-            ],
-            performance_summary: {
-              overall_score: 0.74,
-              strongest_area: "task_completion_rate",
-              improvement_needed: "collaboration_score"
-            }
-          });
-        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [user, isAdmin]);
+  }, [user, isAdmin, adminView]);
 
   const handleGenerateReport = async () => {
     try {
@@ -527,33 +467,28 @@ const Dashboard = () => {
     );
   };
 
+  // Ana render fonksiyonu
   if (loading) {
     return (
-      <Flex justify="center" align="center" h="50vh">
-        <Spinner size="xl" color="blue.500" />
-      </Flex>
+      <Box p={5}>
+        <Spinner size="xl" />
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <Alert status="error" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
-        <AlertIcon boxSize="40px" mr={0} />
-        <Text mt={4} mb={1} fontSize="lg">
-          Data Loading Error
-        </Text>
-        <Text>{error}</Text>
-      </Alert>
+      <Box p={5}>
+        <Alert status="error">
+          <AlertIcon />
+          {error}
+        </Alert>
+      </Box>
     );
   }
 
-  return (
-    <Box width="100%" maxWidth="100%" height="auto">
-      <Box width="100%" maxWidth="100%">
-        {isAdmin ? renderAdminDashboard() : renderEmployeeDashboard()}
-      </Box>
-    </Box>
-  );
+  // Admin veya çalışan dashboard'unu göster
+  return adminView && isAdmin() ? renderAdminDashboard() : renderEmployeeDashboard();
 };
 
 export default Dashboard; 
